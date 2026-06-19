@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adéchat — Automatisez votre boutique WhatsApp</title>
+  <meta name="description" content="Adéchat automatise votre boutique WhatsApp : réponses automatiques IA, commandes, factures, relances. Pour les marchands au Bénin, Sénégal, Côte d'Ivoire, Cameroun et Togo.">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#128C7E">
+  <link rel="apple-touch-icon" href="icon.svg">
+
+  <!--
+  ═══════════════════════════════════════════════════════════
+   GOOGLE ADSENSE — Instructions d'intégration :
+   ① Inscrivez-vous sur https://adsense.google.com
+   ② Attendez l'approbation de votre site (2-14 jours)
+   ③ Remplacez ca-pub-XXXXXXXX par votre publisher ID
+   ④ Décommentez les lignes ci-dessous
+   ⑤ Ajoutez des blocs <ins class="adsbygoogle"> dans le HTML
+      là où vous voulez des publicités (voir exemples plus bas)
+  ═══════════════════════════════════════════════════════════
+  -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:       #080E1C;
+      --bg2:      #0C1525;
+      --card:     #101A2C;
+      --card2:    #152034;
+      --green:    #25D366;
+      --green-d:  #128C7E;
+      --gl:       rgba(37,211,102,.10);
+      --gold:     #F0B429;
+      --white:    #EFF6FF;
+      --muted:    #5E7491;
+      --border:   rgba(37,211,102,.10);
+      --r:        14px;
+      --rl:       22px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(37,211,102,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,211,102,.025) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; line-height: 1.15; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800; }
+    h2 { font-size: clamp(1.7rem, 3.5vw, 2.5rem); font-weight: 700; }
+    h3 { font-size: 1.15rem; font-weight: 600; }
+
+    .grad {
+      background: linear-gradient(135deg, #25D366 0%, #F0B429 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 6%;
+      background: rgba(8,14,28,.88); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem;
+    }
+    .logo .ade { color: var(--gold); }
+    .logo .chat { color: var(--white); }
+    .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border-radius: 30px;
+      font-weight: 600; font-size: .9rem; text-decoration: none;
+      transition: all .2s; cursor: pointer; border: none; font-family: inherit;
+    }
+    .btn-green { background: var(--green); color: #000; }
+    .btn-green:hover { background: #1fc55a; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(37,211,102,.35); }
+    .btn-outline { border: 1.5px solid var(--border); background: transparent; color: var(--white); }
+    .btn-outline:hover { border-color: var(--green); color: var(--green); }
+    .btn-gold { background: var(--gold); color: #000; }
+    .btn-gold:hover { background: #e0a620; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(240,180,41,.35); }
+    .btn-purple { background: #7C3AED; color: white; }
+    .btn-purple:hover { background: #6D28D9; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 60px;
+      padding: 80px 6% 100px; min-height: 90vh;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -80px; right: 0; z-index: 0; pointer-events: none;
+      width: 650px; height: 650px;
+      background: radial-gradient(circle, rgba(37,211,102,.07) 0%, transparent 65%);
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; margin-bottom: 24px;
+      background: var(--gl); border: 1px solid rgba(37,211,102,.2); border-radius: 30px;
+      font-size: .82rem; font-weight: 600; color: var(--green); letter-spacing: .02em;
+    }
+    .hero h1 { margin-bottom: 22px; }
+    .hero p { color: var(--muted); font-size: 1.1rem; margin-bottom: 36px; max-width: 490px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; }
+    .hero-checks {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px 18px;
+      color: var(--muted); font-size: .84rem;
+    }
+    .hero-checks span { color: var(--green); font-weight: 700; }
+
+    /* ── PHONE MOCKUP ── */
+    .phone-wrap {
+      position: relative; display: flex;
+      justify-content: center; align-items: center;
+    }
+    .phone-glow {
+      position: absolute;
+      width: 300px; height: 520px;
+      background: radial-gradient(ellipse, rgba(37,211,102,.14) 0%, transparent 65%);
+      filter: blur(28px);
+    }
+    .phone {
+      position: relative; width: 272px;
+      background: #0D1622; border-radius: 38px;
+      border: 2.5px solid rgba(37,211,102,.22); overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(37,211,102,.06), 0 40px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .phone-notch { width: 88px; height: 22px; background: #080E1C; border-radius: 0 0 14px 14px; margin: 0 auto; }
+    .phone-status { display: flex; justify-content: space-between; padding: 3px 16px; font-size: 10px; color: rgba(255,255,255,.45); }
+    .chat-hdr {
+      display: flex; align-items: center; gap: 10px;
+      background: #128C7E; padding: 10px 14px;
+    }
+    .chat-av {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .chat-nm { font-size: 13px; font-weight: 600; color: white; }
+    .chat-st { font-size: 10px; color: rgba(255,255,255,.65); }
+    .auto-tag {
+      margin-left: auto; font-size: .65rem; font-weight: 600;
+      background: rgba(255,255,255,.18); color: white;
+      padding: 3px 8px; border-radius: 10px;
+    }
+    .chat-body {
+      background: #0B1420; padding: 12px 10px 16px;
+      min-height: 340px; display: flex; flex-direction: column; gap: 7px;
+    }
+    .bbl {
+      max-width: 86%; padding: 7px 10px 4px; border-radius: 10px;
+      font-size: 11.5px; line-height: 1.45;
+      opacity: 0; animation: bbIn .32s ease forwards;
+    }
+    .bbl.in { background: #1E2D3E; color: #D8E8F4; align-self: flex-start; border-bottom-left-radius: 3px; }
+    .bbl.out { background: #025140; color: #D8F0E8; align-self: flex-end; border-bottom-right-radius: 3px; }
+    .bbl-time { font-size: 9px; color: rgba(255,255,255,.38); text-align: right; margin-top: 2px; }
+    .ai-tag {
+      font-size: 9px; background: rgba(240,180,41,.14); color: var(--gold);
+      padding: 1px 5px; border-radius: 4px; margin-bottom: 3px; display: inline-block;
+    }
+    .bbl:nth-child(1) { animation-delay: .7s; }
+    .typing { animation-delay: 1.5s; }
+    .bbl:nth-child(3) { animation-delay: 2.5s; }
+    .bbl:nth-child(4) { animation-delay: 3.5s; }
+    .bbl:nth-child(5) { animation-delay: 4.6s; }
+
+    .typing-dots {
+      display: flex; gap: 4px; align-items: center;
+      padding: 8px 10px; background: #1E2D3E; border-radius: 10px;
+      border-bottom-left-radius: 3px; align-self: flex-start;
+      opacity: 0; animation: bbIn .3s ease 1.5s forwards;
+    }
+    .dot {
+      width: 6px; height: 6px; background: rgba(255,255,255,.38);
+      border-radius: 50%; animation: bonce 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+
+    @keyframes bbIn { from { opacity: 0; transform: scale(.93) translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes bonce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+
+    .ai-float {
+      position: absolute; bottom: 28px; right: -24px;
+      background: var(--card2); border: 1px solid rgba(37,211,102,.2);
+      border-radius: 12px; padding: 8px 12px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: .73rem; font-weight: 500; white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+      animation: floatY 3s ease-in-out infinite;
+    }
+    .live-dot {
+      width: 8px; height: 8px; background: var(--green); border-radius: 50%;
+      animation: puls 2s infinite;
+    }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes puls { 0%,100% { box-shadow: 0 0 6px var(--green); } 50% { box-shadow: 0 0 14px var(--green); } }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 28px 6%;
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+      background: rgba(255,255,255,.018);
+    }
+    .t-stat { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .t-stat .n { font-family: 'Space Grotesk', sans-serif; font-size: 1.55rem; font-weight: 700; color: var(--green); }
+    .t-stat .l { font-size: .78rem; color: var(--muted); }
+    .flags { display: flex; gap: 8px; font-size: 1.4rem; }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 90px 6%; }
+    .s-label {
+      display: inline-block; color: var(--green); font-size: .78rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px;
+      padding-left: 14px; border-left: 3px solid var(--green);
+    }
+    .s-title { margin-bottom: 12px; }
+    .s-sub { color: var(--muted); max-width: 560px; margin-bottom: 52px; }
+
+    /* ── FEATURES ── */
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .feat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--rl); padding: 28px;
+      transition: all .25s; position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--green-d), var(--green));
+      transform: scaleX(0); transform-origin: left; transition: transform .3s;
+    }
+    .feat-card:hover { border-color: rgba(37,211,102,.25); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,.3); }
+    .feat-card:hover::before { transform: scaleX(1); }
+    .feat-ic { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .feat-card h3 { margin-bottom: 8px; }
+    .feat-card p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* ── HOW IT WORKS ── */
+    .how-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; position: relative;
+    }
+    .how-grid::before {
+      content: ''; position: absolute; top: 36px; left: 22%; right: 22%;
+      height: 1px; background: linear-gradient(90deg, transparent, rgba(37,211,102,.3), transparent);
+    }
+    .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 32px 22px; }
+    .step-n {
+      width: 72px; height: 72px; border-radius: 50%;
+      border: 2px solid var(--green); background: var(--gl);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--green);
+      margin-bottom: 20px; position: relative; z-index: 1;
+    }
+    .step h3 { margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: .9rem; }
+
+    /* ── PRICING ── */
+    .price-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+    .price-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--rl); padding: 32px; position: relative;
+    }
+    .price-card.feat {
+      border-color: var(--green);
+      background: linear-gradient(145deg, var(--card2) 0%, rgba(18,140,126,.07) 100%);
+      box-shadow: 0 0 44px rgba(37,211,102,.1);
+      transform: scale(1.03);
+    }
+    .pop-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(90deg, var(--green-d), var(--green));
+      color: #000; font-size: .72rem; font-weight: 700;
+      padding: 4px 14px; border-radius: 30px; white-space: nowrap; letter-spacing: .02em;
+    }
+    .plan-nm {
+      font-family: 'Space Grotesk', sans-serif; font-size: .82rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: 12px;
+    }
+    .plan-nm.gld { color: var(--gold); }
+    .plan-nm.prp { color: #A78BFA; }
+    .price-amt { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .price-per { color: var(--muted); font-size: .84rem; margin-bottom: 24px; }
+    .f-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+    .f-list li { display: flex; align-items: flex-start; gap: 10px; font-size: .88rem; color: var(--white); }
+    .f-list li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .f-list li.off { color: var(--muted); }
+    .f-list li.off::before { content: '–'; color: var(--muted); }
+
+    /* ── TESTIMONIALS ── */
+    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .testi-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--rl); padding: 28px;
+    }
+    .stars { color: var(--gold); font-size: 1rem; margin-bottom: 14px; letter-spacing: 2px; }
+    .testi-txt { color: var(--muted); font-size: .92rem; line-height: 1.65; margin-bottom: 18px; }
+    .testi-au { display: flex; align-items: center; gap: 12px; }
+    .testi-av {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--gl); border: 1px solid rgba(37,211,102,.18);
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .testi-nm { font-weight: 600; font-size: .88rem; }
+    .testi-lc { font-size: .76rem; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-box {
+      max-width: 700px; margin: 0 auto;
+      background: linear-gradient(145deg, var(--card2) 0%, rgba(18,140,126,.09) 100%);
+      border: 1px solid rgba(37,211,102,.2); border-radius: 28px;
+      padding: 60px 40px; text-align: center;
+    }
+    .cta-box h2 { margin-bottom: 14px; }
+    .cta-box p { color: var(--muted); margin-bottom: 32px; font-size: 1.05rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border); padding: 36px 6%;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    footer p { color: var(--muted); font-size: .84rem; }
+    footer a { color: var(--muted); text-decoration: none; font-size: .84rem; }
+    footer a:hover { color: var(--green); }
+    .f-links { display: flex; gap: 20px; }
+
+    /* ── AD UNIT PLACEHOLDER ── */
+    /* Pour Google AdSense : remplacez .ad-placeholder par les balises <ins class="adsbygoogle"> */
+    .ad-zone {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center;
+      padding: 16px 6%; background: rgba(255,255,255,.012);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    /* Exemple bloc AdSense 728x90 (leaderboard) :
+       <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px"
+            data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    */
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .feat-grid, .price-grid, .testi-grid { grid-template-columns: repeat(2, 1fr); }
+      .price-card.feat { transform: none; }
+    }
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; text-align: center; padding: 50px 5% 70px; min-height: auto; }
+      .hero p, .s-sub { max-width: 100%; }
+      .hero-btns { justify-content: center; }
+      .hero-checks { justify-content: center; }
+      .ai-float { display: none; }
+      .nav-links { display: none; }
+      .how-grid, .feat-grid, .price-grid, .testi-grid { grid-template-columns: 1fr; }
+      .how-grid::before { display: none; }
+      .trust-bar { gap: 28px; }
+      .cta-box { padding: 40px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <a href="index.html" class="logo">
+    <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="4" width="30" height="23" rx="6" fill="#128C7E"/>
+      <path d="M7 27 L2 37 L15 27 Z" fill="#128C7E"/>
+      <path d="M22 9 L16 20 L21 20 L14 31 L29 15 L24 15 L30 9 Z" fill="#F0B429"/>
+    </svg>
+    <span class="ade">Adé</span><span class="chat">chat</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+    <li><a href="#comment">Comment ça marche</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
+    <li><a href="dashboard.html" style="color:var(--green)">Connexion →</a></li>
+  </ul>
+
+  <a href="dashboard.html" class="btn btn-green">Commencer gratuitement</a>
+</nav>
+
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label">🌍 Conçu pour l'Afrique de l'Ouest</div>
+
+    <h1>Votre WhatsApp <span class="grad">vend, répond<br>et facture</span> à votre place.</h1>
+
+    <p>Adéchat transforme votre numéro WhatsApp en assistant commercial automatique. L'IA gère vos clients pendant que vous vivez votre vie.</p>
+
+    <div class="hero-btns">
+      <a href="dashboard.html" class="btn btn-green" style="font-size:1rem; padding:13px 28px">⚡ Commencer — C'est gratuit</a>
+      <a href="#comment" class="btn btn-outline" style="font-size:1rem; padding:13px 28px">Voir la démo →</a>
+    </div>
+
+    <div class="hero-checks">
+      <span>✓</span> Sans carte bancaire &nbsp;
+      <span>✓</span> Prêt en 2 minutes &nbsp;
+      <span>✓</span> 100 messages offerts
+    </div>
+  </div>
+
+  <!-- PHONE MOCKUP avec animation chat -->
+  <div class="phone-wrap">
+    <div class="phone-glow"></div>
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-status"><span>9:41</span><span>●●● ▐</span></div>
+      <div class="chat-hdr">
+        <div class="chat-av">👩🏾</div>
+        <div>
+          <div class="chat-nm">Aminata K.</div>
+          <div class="chat-st">en ligne</div>
+        </div>
+        <div class="auto-tag">⚡ Auto</div>
+      </div>
+      <div class="chat-body">
+        <div class="bbl in">Bonjour ! Le tissu wax hollandais 6 yards est dispo ?<div class="bbl-time">10:23</div></div>
+        <div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="bbl out"><span class="ai-tag">⚡ IA</span><br>Oui ! Wax hollandais 6 yards, 8 coloris. Prix&nbsp;: <strong>15&nbsp;000 FCFA</strong>. Livraison Abidjan disponible 🎉<div class="bbl-time">10:23 ✓✓</div></div>
+        <div class="bbl in">Super ! Je prends 2. Comment payer ?<div class="bbl-time">10:24</div></div>
+        <div class="bbl out"><span class="ai-tag">⚡ IA</span><br>✅ Commande N°CMD-0847 enregistrée<br>Total : <strong>30&nbsp;000 FCFA</strong><br>Paiement : Wave 📲 ou Orange Money<div class="bbl-time">10:24 ✓✓</div></div>
+      </div>
+    </div>
+    <div class="ai-float"><div class="live-dot"></div>⚡ IA a répondu à Aminata — maintenant</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ TRUST BAR ═══════════════ -->
+<div class="trust-bar">
+  <div class="flags">🇧🇯 🇸🇳 🇨🇮 🇨🇲 🇹🇬</div>
+  <div class="t-stat"><span class="n">1 200+</span><span class="l">marchands actifs</span></div>
+  <div class="t-stat"><span class="n">5</span><span class="l">pays couverts</span></div>
+  <div class="t-stat"><span class="n">48 000</span><span class="l">messages/mois</span></div>
+  <div class="t-stat"><span class="n">4.8 ★</span><span class="l">note moyenne</span></div>
+</div>
+
+
+<!-- ═══════════ AD ZONE (désactivée — voir instructions) ═══════════ -->
+<!--
+<div class="ad-zone">
+  <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px"
+       data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+-->
+
+
+<!-- ═══════════════ FEATURES ═══════════════ -->
+<section id="fonctionnalites">
+  <div class="reveal">
+    <span class="s-label">Fonctionnalités</span>
+    <h2 class="s-title">Tout ce dont votre boutique a besoin</h2>
+    <p class="s-sub">Six outils conçus pour les marchands africains qui utilisent WhatsApp comme boutique principale.</p>
+  </div>
+
+  <div class="feat-grid">
+    <div class="feat-card reveal"><span class="feat-ic">🤖</span><h3>Réponses automatiques IA</h3><p>L'IA répond instantanément à vos clients 24h/24, 7j/7. Même quand vous dormez ou êtes au marché.</p></div>
+    <div class="feat-card reveal" style="transition-delay:.07s"><span class="feat-ic">📦</span><h3>Gestion des commandes</h3><p>Chaque commande WhatsApp est enregistrée automatiquement avec client, articles et montant total.</p></div>
+    <div class="feat-card reveal" style="transition-delay:.14s"><span class="feat-ic">💰</span><h3>Relances de paiement</h3><p>Identifiez les clients qui n'ont pas payé et envoyez des rappels automatiques personnalisés.</p></div>
+    <div class="feat-card reveal" style="transition-delay:.21s"><span class="feat-ic">🧾</span><h3>Factures PDF</h3><p>Générez des factures professionnelles en un clic et envoyez-les directement par WhatsApp.</p></div>
+    <div class="feat-card reveal" style="transition-delay:.28s"><span class="feat-ic">📊</span><h3>Tableau de bord ventes</h3><p>Visualisez vos ventes du jour, semaine, mois. Identifiez vos meilleurs produits et clients.</p></div>
+    <div class="feat-card reveal" style="transition-delay:.35s"><span class="feat-ic">💬</span><h3>FAQ intelligente</h3><p>Configurez des réponses automatiques aux questions fréquentes : prix, livraison, disponibilités.</p></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ HOW IT WORKS ═══════════════ -->
+<section id="comment" style="background:rgba(255,255,255,.014); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <div style="text-align:center;" class="reveal">
+    <span class="s-label">Comment ça marche</span>
+    <h2 class="s-title">Opérationnel en 3 étapes</h2>
+    <p class="s-sub" style="margin:0 auto 52px;">Pas besoin de coder. Si vous utilisez WhatsApp, vous saurez utiliser Adéchat.</p>
+  </div>
+  <div class="how-grid">
+    <div class="step reveal"><div class="step-n">1</div><h3>Connectez WhatsApp</h3><p>Liez votre numéro WhatsApp Business à Adéchat via l'API officielle Meta en 2 minutes.</p></div>
+    <div class="step reveal" style="transition-delay:.15s"><div class="step-n">2</div><h3>Configurez l'IA</h3><p>Décrivez vos produits, vos prix et vos conditions. L'IA apprend votre catalogue immédiatement.</p></div>
+    <div class="step reveal" style="transition-delay:.3s"><div class="step-n">3</div><h3>Vendez automatiquement</h3><p>L'IA gère vos clients, enregistre les commandes et génère vos factures à votre place.</p></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ PRICING ═══════════════ -->
+<section id="tarifs">
+  <div style="text-align:center;" class="reveal">
+    <span class="s-label">Tarifs</span>
+    <h2 class="s-title">Simple. Transparent. En FCFA.</h2>
+    <p class="s-sub" style="margin:0 auto 52px;">Payez en FCFA, pas en dollars. Commencez gratuitement, évoluez quand vous êtes prêt.</p>
+  </div>
+  <div class="price-grid">
+    <div class="price-card reveal">
+      <div class="plan-nm">Gratuit</div>
+      <div class="price-amt">0 <span style="font-size:.9rem;font-weight:500;color:var(--muted)">FCFA</span></div>
+      <div class="price-per">pour toujours</div>
+      <ul class="f-list">
+        <li>100 messages automatiques/mois</li>
+        <li>Gestion des commandes (basique)</li>
+        <li>Catalogue 10 articles</li>
+        <li class="off">Relances de paiement</li>
+        <li class="off">Factures PDF</li>
+        <li class="off">Statistiques avancées</li>
+      </ul>
+      <a href="dashboard.html" class="btn btn-outline" style="width:100%;justify-content:center;">Commencer</a>
+    </div>
+
+    <div class="price-card feat reveal" style="transition-delay:.1s">
+      <div class="pop-badge">⭐ Le plus populaire</div>
+      <div class="plan-nm gld">Premium</div>
+      <div class="price-amt grad">2 000 <span style="font-size:.9rem">FCFA</span></div>
+      <div class="price-per">par mois · sans engagement</div>
+      <ul class="f-list">
+        <li>Messages illimités</li>
+        <li>Gestion des commandes complète</li>
+        <li>Catalogue illimité</li>
+        <li>Relances automatiques de paiement</li>
+        <li>Factures PDF professionnelles</li>
+        <li>Tableau de bord statistiques</li>
+      </ul>
+      <a href="dashboard.html" class="btn btn-gold" style="width:100%;justify-content:center;">Essai gratuit 14 jours</a>
+    </div>
+
+    <div class="price-card reveal" style="transition-delay:.2s">
+      <div class="plan-nm prp">Business</div>
+      <div class="price-amt" style="color:#A78BFA">5 000 <span style="font-size:.9rem;font-weight:500;color:var(--muted)">FCFA</span></div>
+      <div class="price-per">par mois</div>
+      <ul class="f-list">
+        <li>Tout du plan Premium</li>
+        <li>3 numéros WhatsApp</li>
+        <li>API pour intégrations tierces</li>
+        <li>Export Excel / CSV</li>
+        <li>Support prioritaire 24h</li>
+        <li>Formation personnalisée</li>
+      </ul>
+      <a href="dashboard.html" class="btn btn-purple" style="width:100%;justify-content:center;">Contacter l'équipe</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
+<section style="background:rgba(255,255,255,.014);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div style="text-align:center;" class="reveal">
+    <span class="s-label">Témoignages</span>
+    <h2 class="s-title">Ils ont automatisé leur boutique</h2>
+    <p class="s-sub" style="margin:0 auto 52px;">Des marchands comme vous, à travers l'Afrique de l'Ouest.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testi-txt">"Avant, je passais 3h par jour à répondre sur WhatsApp. Maintenant l'IA s'en charge. J'ai doublé mes commandes le premier mois."</p>
+      <div class="testi-au"><div class="testi-av">👩🏾</div><div><div class="testi-nm">Fatoumata D.</div><div class="testi-lc">🇸🇳 Dakar · Mode & Tissus</div></div></div>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.1s">
+      <div class="stars">★★★★★</div>
+      <p class="testi-txt">"Les factures PDF automatiques ont tout changé. Mes clients font plus confiance à ma boutique. Je recommande à tous les commerçants !"</p>
+      <div class="testi-au"><div class="testi-av">👨🏿</div><div><div class="testi-nm">Koffi A.</div><div class="testi-lc">🇨🇮 Abidjan · Électronique</div></div></div>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.2s">
+      <div class="stars">★★★★★</div>
+      <p class="testi-txt">"La relance automatique des impayés m'a permis de récupérer 45 000 FCFA en un mois. L'abonnement est rentabilisé 22 fois !"</p>
+      <div class="testi-au"><div class="testi-av">👩🏿</div><div><div class="testi-nm">Adjoua M.</div><div class="testi-lc">🇧🇯 Cotonou · Cosmétiques</div></div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ CTA FINAL ═══════════════ -->
+<section style="text-align:center; padding:80px 6%;">
+  <div class="cta-box reveal">
+    <h2>Votre boutique WhatsApp mérite mieux que des réponses manuelles.</h2>
+    <p>Rejoignez 1 200+ marchands qui vendent automatiquement grâce à Adéchat.</p>
+    <a href="dashboard.html" class="btn btn-green" style="font-size:1.05rem;padding:15px 36px">⚡ Créer mon compte gratuit</a>
+    <div style="margin-top:20px;color:var(--muted);font-size:.84rem;">🇧🇯 🇸🇳 🇨🇮 🇨🇲 🇹🇬 &nbsp;Disponible dans 5 pays</div>
+  </div>
+</section>
+
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <a href="index.html" class="logo" style="font-size:1.1rem;">
+    <svg width="28" height="28" viewBox="0 0 40 40" fill="none"><rect x="2" y="4" width="30" height="23" rx="6" fill="#128C7E"/><path d="M7 27 L2 37 L15 27 Z" fill="#128C7E"/><path d="M22 9 L16 20 L21 20 L14 31 L29 15 L24 15 L30 9 Z" fill="#F0B429"/></svg>
+    <span class="ade">Adé</span><span class="chat">chat</span>
+  </a>
+  <p>© 2025 Adéchat · Automatisez votre boutique WhatsApp</p>
+  <div class="f-links">
+    <a href="#">Confidentialité</a>
+    <a href="#">Conditions</a>
+    <a href="dashboard.html">Tableau de bord</a>
+  </div>
+</footer>
+
+<script>
+  // ── REVEAL ON SCROLL ──
+  const revEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  revEls.forEach(el => obs.observe(el));
+
+  // ── SERVICE WORKER (PWA) ──
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // ── PHONE CHAT LOOP (reset toutes les 9s) ──
+  function resetPhoneAnim() {
+    document.querySelectorAll('.bbl, .typing-dots').forEach(el => {
+      el.style.animation = 'none';
+      void el.offsetHeight;
+      el.style.animation = '';
+    });
+  }
+  setInterval(resetPhoneAnim, 9000);
+</script>
+</body>
+</html>
